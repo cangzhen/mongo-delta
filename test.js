@@ -1,22 +1,24 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var async = require('async');
-var A =  'mongodb://localhost:27017/test';
-var B = 'mongodb://localhost:27017/test1';
 
+//define schema
+var Schema = require('mongoose').Schema;
 var CatSchema = new Schema({
     name: {type:String},
-    money: Number,
-    createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}
 }, {versionKey: false,timestamps: true});
 
 
+//mongo-delta options
+var opts = {
+    src: 'mongodb://localhost:27017/test2',
+    dest: 'mongodb://localhost:27017/test1',
+    schemas : [
+        {name: 'Cat', schema: CatSchema} //transition this schema from src to dest
+    ]
+}
 
-
-
+var mongoose = require('mongoose');
 function createInA(cb) {
-    var dbA = mongoose.createConnection(A);
+    var dbA = mongoose.createConnection(opts.src);
     var CatA = dbA.model('Cat', CatSchema);
     new CatA({name: 'kitty'}).save(function (err, doc) {
         if (err) {
@@ -30,7 +32,7 @@ function createInA(cb) {
 
 
 function findInB(cb) {
-    var dbB = mongoose.createConnection(B);
+    var dbB = mongoose.createConnection(opts.dest);
     var CatB = dbB.model('Cat', CatSchema);
     CatB.find({name: 'kitty'}, function (err, docs) {
         if (err) {
@@ -43,14 +45,8 @@ function findInB(cb) {
 }
 
 function transDataDelta(cb) {
-    var opts = {
-        src: A,
-        dest: B,
-        step:86400,//每次循环查询的时间片
-    }
-    opts.schemas = [
-        {name: 'Cat', schema: CatSchema}
-    ]
+
+    //start mongo-delta
     var MongoDelta = require('./mongo-delta');
     var delta = new MongoDelta(opts);
     delta.startOne(function(err){
@@ -59,7 +55,7 @@ function transDataDelta(cb) {
     });
 }
 
-
+var async = require('async');
 async.series([createInA,
     transDataDelta,
     findInB,
@@ -71,4 +67,5 @@ async.series([createInA,
     }
     process.exit();
 })
+
 

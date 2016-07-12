@@ -18,22 +18,32 @@ npm install mongo-delta
 ##Usage
 
 ```javascript
-   var A =  'mongodb://localhost:27017/test';
-   var B = 'mongodb://localhost:27017/test1';
-   var opts = {
-        src: A,
-        dest: B
-   }
-    
-    //schema definition two transition between two database
-    opts.schemes = [
-        {name: 'Cat', schema: CatSchema}
+
+//define schema
+var Schema = require('mongoose').Schema;
+var CatSchema = new Schema({
+    name: {type:String},
+    updatedAt: {type: Date, default: Date.now}
+}, {versionKey: false,timestamps: true});
+
+
+//mongo-delta options
+var opts = {
+    src: 'mongodb://localhost:27017/test2',
+    dest: 'mongodb://localhost:27017/test1',
+    schemas : [
+        {name: 'Cat', schema: CatSchema} //transition this schema from src to dest
     ]
-    
-    var MongoDelta = require('./mongoDelta');
-    var delta = new MongoDelta(opts);
-    delta.startOne();
-    //delta.startLoop(); //loop 
+}
+
+//start mongo-delta
+var MongoDelta = require('./mongo-delta');
+var delta = new MongoDelta(opts);
+delta.startOne(function(err){
+    console.log('============sync data from A to B============');
+    cb(err);
+});
+
 
 ```
 

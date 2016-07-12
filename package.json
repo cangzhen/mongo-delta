@@ -1,6 +1,6 @@
 {
   "name": "mongo-delta",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Delta Update data between different mongodb",
   "main": "mongo-delta.js",
   "scripts": {
