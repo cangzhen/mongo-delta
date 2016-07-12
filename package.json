@@ -17,7 +17,12 @@
   "dependencies": {
     "mongoose": "~4.x",
     "async":"~1.5.0",
-    "lodash":"~4.x"
+    "lodash":"~4.x",
+    "moment":"~2.10.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cangzhen/mongo-delta.git"
   },
   "author": "lcz",
   "license": "MIT"
