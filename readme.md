@@ -1,7 +1,7 @@
 
 
 
-#`mongo-delta`: Delta Update data between two mongodb
+# `mongo-delta`: Delta Update data between two mongodb
 
 [![Build Status](https://api.travis-ci.org/cangzhen/mongo-delta.svg?branch=master)](https://travis-ci.org/cangzhen/mongo-delta)
 [![NPM version](https://badge.fury.io/js/mongo-delta.svg)](https://www.npmjs.com/package/mongo-delta)
@@ -9,13 +9,13 @@
 `mongo-delta` 增量同步两个mongodb的数据
 
 
-##Installing
+## Installing
 
 ```
 npm install mongo-delta
 ```
 
-##Usage
+## Usage
 
 ```javascript
 
@@ -47,7 +47,7 @@ delta.startOne(function(err){
 
 ```
 
-##Opts
+## Opts
 
 - src 源数据库的url
 - dest 目标数据库的url
